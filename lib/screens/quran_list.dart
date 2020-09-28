@@ -109,7 +109,7 @@ class _QuranListPageState extends State<QuranListPage> {
         ),
         // isThreeLine: true,
         trailing: Icon(Icons.chevron_right),
-        onTap: () => Navigator.pushNamed(context, Navigation.About)
+        onTap: () => Navigator.pushNamed(context, Navigation.QuranDetail, arguments: quranList )
       ),
     );
   }
