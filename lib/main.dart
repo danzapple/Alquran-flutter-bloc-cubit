@@ -1,10 +1,12 @@
-import 'package:alquranMobile/utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:alquranMobile/utils/Colors.dart';
+import 'package:alquranMobile/configs/Routes.dart';
 import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
+import 'package:alquranMobile/constants/Navigation.dart';
 
 class MyBlocObserver extends BlocObserver {
   @override
@@ -29,7 +31,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
 
     SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: ColorBase.white));
+      SystemUiOverlayStyle(
+        statusBarColor: ColorBase.white
+      )
+    );
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -44,6 +49,8 @@ class App extends StatelessWidget {
         fontFamily: FontsFamily.roboto
       ),
       home: QuranListPage(),
+      onGenerateRoute: generateRoutes,
+      navigatorKey: Navigation.navKey,
     );
   }
 }
