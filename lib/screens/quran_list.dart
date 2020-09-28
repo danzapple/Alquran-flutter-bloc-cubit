@@ -1,6 +1,8 @@
+import 'package:alquranMobile/utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:alquranMobile/constants/Dictionary.dart';
 import 'package:alquranMobile/repositories/QuranListRepository.dart';
 import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
 
@@ -10,6 +12,9 @@ class QuranListPage extends StatefulWidget {
 }
 
 class _QuranListPageState extends State<QuranListPage> {
+
+  final List<String> actionList = [Dictionary.settings, Dictionary.about];
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -18,7 +23,31 @@ class _QuranListPageState extends State<QuranListPage> {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Contoh App'),
+          bottom: PreferredSize(
+            child: Container(
+              color: ColorBase.iron,
+              height: 1.0,
+            ),
+          preferredSize: Size.fromHeight(1.0)
+          ),
+          elevation: 0,
+          title: Text(
+            Dictionary.appName,
+            style: TextStyle(
+              color: ColorBase.black
+            ),
+          ),
+          backgroundColor: ColorBase.white,
+          actions: [
+            PopupMenuButton(
+            icon: Icon(Icons.more_vert, color: ColorBase.black),
+            tooltip: 'More options',
+            elevation: 20,
+            itemBuilder: (context) => actionList
+                .map((menu) => PopupMenuItem(child: Text(menu)))
+                .toList(),
+          )
+          ],
         ),
         body: BlocBuilder<QuranlistCubit, QuranlistState>(
           builder: (context, state) {
@@ -26,18 +55,24 @@ class _QuranListPageState extends State<QuranListPage> {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state is ErrorState) {
-              return Center(
-                child: Icon(Icons.close),
-              );
             } else if (state is LoadedState) {
-              final movies = state.quranList;
-
+              final quranList = state.quranList;
               return ListView.builder(
-                itemCount: movies.length,
+                itemCount: quranList.length,
                 itemBuilder: (context, index) => Card(
                   child: ListTile(
-                    title: Text(movies[index].suratName),
+                    leading: Container(
+                      height: 45,
+                      width: 45,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: ColorBase.separator, width: 2.0),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(child: Text(
+                        quranList[index].id.toString()
+                      )),
+                    ),
+                    title: Text(quranList[index].suratName),
                   ),
                 ),
               );

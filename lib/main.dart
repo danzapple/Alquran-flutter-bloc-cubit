@@ -1,3 +1,4 @@
+import 'package:alquranMobile/utils/Colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,6 +28,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: ColorBase.white));
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -36,6 +40,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Al-Quran Mobile',
       theme: ThemeData(
+        primaryColorBrightness: Brightness.light,
         fontFamily: FontsFamily.roboto
       ),
       home: QuranListPage(),
