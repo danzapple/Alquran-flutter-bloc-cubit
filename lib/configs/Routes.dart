@@ -25,8 +25,7 @@ Route generateRoutes(RouteSettings settings) {
     default:
       return null;
   }
-
-
+  
 }
 
 MaterialPageRoute buildRoute(RouteSettings settings, Widget builder) {

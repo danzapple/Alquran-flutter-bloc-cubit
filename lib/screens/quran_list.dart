@@ -1,10 +1,12 @@
-import 'package:alquranMobile/models/QuranListModel.dart';
-import 'package:alquranMobile/utils/Colors.dart';
-import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:alquranMobile/utils/Colors.dart';
+import 'package:alquranMobile/utils/FontsFamily.dart';
+import 'package:alquranMobile/components/Appbar.dart';
 import 'package:alquranMobile/constants/Dictionary.dart';
+import 'package:alquranMobile/constants/Navigation.dart';
+import 'package:alquranMobile/models/QuranListModel.dart';
 import 'package:alquranMobile/repositories/QuranListRepository.dart';
 import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
 
@@ -55,22 +57,8 @@ class _QuranListPageState extends State<QuranListPage> {
   }
 
   Widget buildAppBar() {
-    return AppBar(
-      bottom: PreferredSize(
-        child: Container(
-          color: ColorBase.iron,
-          height: 1.0,
-        ),
-      preferredSize: Size.fromHeight(1.0)
-      ),
-      elevation: 0,
-      title: Text(
-        Dictionary.appName,
-        style: TextStyle(
-          color: ColorBase.black
-        ),
-      ),
-      backgroundColor: ColorBase.white,
+    return CustomAppBar(
+      title: Dictionary.appName,
       actions: [
         PopupMenuButton(
           icon: Icon(Icons.more_vert, color: ColorBase.black),
@@ -121,7 +109,7 @@ class _QuranListPageState extends State<QuranListPage> {
         ),
         // isThreeLine: true,
         trailing: Icon(Icons.chevron_right),
-        onTap: (){},
+        onTap: () => Navigator.pushNamed(context, Navigation.About)
       ),
     );
   }
