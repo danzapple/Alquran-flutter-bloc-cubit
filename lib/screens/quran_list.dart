@@ -1,4 +1,5 @@
 import 'package:alquranMobile/utils/Colors.dart';
+import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,10 +44,8 @@ class _QuranListPageState extends State<QuranListPage> {
             icon: Icon(Icons.more_vert, color: ColorBase.black),
             tooltip: 'More options',
             elevation: 20,
-            itemBuilder: (context) => actionList
-                .map((menu) => PopupMenuItem(child: Text(menu)))
-                .toList(),
-          )
+            itemBuilder: (context) => actionList.map((menu) => PopupMenuItem(child: Text(menu))).toList(),
+            )
           ],
         ),
         body: BlocBuilder<QuranlistCubit, QuranlistState>(
@@ -57,23 +56,49 @@ class _QuranListPageState extends State<QuranListPage> {
               );
             } else if (state is LoadedState) {
               final quranList = state.quranList;
-              return ListView.builder(
-                itemCount: quranList.length,
-                itemBuilder: (context, index) => Card(
-                  child: ListTile(
-                    leading: Container(
-                      height: 45,
-                      width: 45,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: ColorBase.separator, width: 2.0),
-                        shape: BoxShape.circle,
+              return Container(
+                // color: ColorBase.white,
+                child: ListView.separated(
+                  separatorBuilder: (context, index) => Divider(),
+                  itemCount: quranList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      contentPadding: EdgeInsets.all(16),
+                      leading: Container(
+                        height: 45,
+                        width: 45,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: ColorBase.separator, width: 2.0),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(child: Text(
+                          quranList[index].id.toString()
+                        )),
                       ),
-                      child: Center(child: Text(
-                        quranList[index].id.toString()
-                      )),
-                    ),
-                    title: Text(quranList[index].suratName),
-                  ),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(quranList[index].suratName),
+                          Text(
+                            '( ${quranList[index].suratText} ) ', 
+                            style: TextStyle(
+                              fontFamily: FontsFamily.lpmq
+                              )
+                            ) 
+                        ]
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${Dictionary.translate} ${quranList[index].suratTerjemahan}'),
+                          Text('${Dictionary.ayatCount}: ${quranList[index].countAyat}')
+                        ],
+                      ),
+                      // isThreeLine: true,
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: (){},
+                    );
+                  }
                 ),
               );
             } else {
