@@ -1,67 +1,44 @@
-import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
-import 'package:alquranMobile/repositories/QuranListRepository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'package:alquranMobile/utils/FontsFamily.dart';
+import 'package:alquranMobile/screens/quran_list.dart';
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+class MyBlocObserver extends BlocObserver {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      home: BlocProvider(
-        create: (context) => QuranlistCubit(
-          repository: QuranListRepository()
-        ),
-        child: QuranListPage(),
-      ),
-    );
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+    print('$error, $stackTrace');
+    super.onError(cubit, error, stackTrace);
   }
 }
 
-class QuranListPage extends StatefulWidget {
-  @override
-  _QuranListPageState createState() => _QuranListPageState();
+void main() {
+  Bloc.observer = MyBlocObserver();
+  runApp(App());
 }
 
-class _QuranListPageState extends State<QuranListPage> {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Contoh App'),
-      ),
-      body: BlocBuilder<QuranlistCubit, QuranlistState>(
-        builder: (context, state) {
-          if (state is LoadingState) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is ErrorState) {
-            return Center(
-              child: Icon(Icons.close),
-            );
-          } else if (state is LoadedState) {
-            final movies = state.quranList;
 
-            return ListView.builder(
-              itemCount: movies.length,
-              itemBuilder: (context, index) => Card(
-                child: ListTile(
-                  title: Text(movies[index].suratName),
-                ),
-              ),
-            );
-          } else {
-            return Container();
-          }
-        },
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Al-Quran Mobile',
+      theme: ThemeData(
+        fontFamily: FontsFamily.roboto
       ),
+      home: QuranListPage(),
     );
   }
 }
