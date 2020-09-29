@@ -1,10 +1,12 @@
+import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
+import 'package:alquranMobile/repositories/QuranListRepository.dart';
+import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:alquranMobile/utils/Colors.dart';
 import 'package:alquranMobile/configs/Routes.dart';
-import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
 import 'package:alquranMobile/constants/Dictionary.dart';
@@ -42,16 +44,21 @@ class App extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: Dictionary.appName,
-      theme: ThemeData(
-        primaryColorBrightness: Brightness.light,
-        fontFamily: FontsFamily.roboto
+    return BlocProvider(
+      create:(context) => QuranlistCubit(
+        repository: QuranListRepository()
       ),
-      home: QuranListPage(),
-      onGenerateRoute: generateRoutes,
-      navigatorKey: Navigation.navKey,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: Dictionary.appName,
+        theme: ThemeData(
+          primaryColorBrightness: Brightness.light,
+          fontFamily: FontsFamily.roboto
+        ),
+        home: QuranListPage(),
+        onGenerateRoute: generateRoutes,
+        navigatorKey: Navigation.navKey,
+      ),
     );
   }
 }

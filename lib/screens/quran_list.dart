@@ -8,7 +8,6 @@ import 'package:alquranMobile/constants/Dictionary.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
 import 'package:alquranMobile/models/QuranListModel.dart';
 import 'package:alquranMobile/models/PopupMenuModel.dart';
-import 'package:alquranMobile/repositories/QuranListRepository.dart';
 import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
 
 class QuranListPage extends StatefulWidget {
@@ -17,23 +16,36 @@ class QuranListPage extends StatefulWidget {
 }
 
 class _QuranListPageState extends State<QuranListPage> {
+
+  @override
+  void initState() {
+    context.bloc<QuranlistCubit>().getQuranList();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => QuranlistCubit(
-        repository: QuranListRepository()
-      ),
-      child: Scaffold(
-        appBar: buildAppBar(),
-        body: BlocBuilder<QuranlistCubit, QuranlistState>(
-          builder: (context, state) {
-            if (state is LoadingState) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is LoadedState) {
-              return Container(
-                color: ColorBase.white,
+    return Scaffold(
+      appBar: buildAppBar(),
+      body: BlocConsumer<QuranlistCubit, QuranlistState>(
+        listener: (context, state) {
+          if (state is ErrorState) {
+            Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('error bro'),
+                ),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is LoadingState) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is LoadedState) {
+            return Container(
+              color: ColorBase.white,
+              child: RefreshIndicator(
+                onRefresh: () => context.bloc<QuranlistCubit>().getQuranList(),
                 child: ListView.separated(
                   separatorBuilder: (context, index) => Divider(
                     height: 1, 
@@ -44,12 +56,12 @@ class _QuranListPageState extends State<QuranListPage> {
                     return buildListTile(quranList);
                   }
                 ),
-              );
-            } else {
-              return Container();
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
@@ -59,9 +71,10 @@ class _QuranListPageState extends State<QuranListPage> {
       title: Dictionary.appName,
       actions: [
         PopupMenuButton(
+          offset: Offset(0,10),
           icon: Icon(Icons.more_vert, color: ColorBase.black),
           tooltip: 'More options',
-          elevation: 20,
+          elevation: 5,
           onSelected: _navigate,
           itemBuilder: (context) => actionList.map((menu) => PopupMenuItem(
             child: Text(menu.title),
@@ -88,15 +101,25 @@ class _QuranListPageState extends State<QuranListPage> {
             shape: BoxShape.circle,
           ),
           child: Center(child: Text(
-            quranList.id.toString()
+            quranList.id.toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 18.0,
+              color: ColorBase.grey
+            ),
           )),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(quranList.suratName),
             Text(
-              '( ${quranList.suratText} ) ', 
+              quranList.suratName,
+              style: TextStyle(
+                fontWeight: FontWeight.w500
+              )
+            ),
+            Text(
+              ' ( ${quranList.suratText} ) ', 
               style: TextStyle(
                 fontFamily: FontsFamily.lpmq
                 )
@@ -106,8 +129,20 @@ class _QuranListPageState extends State<QuranListPage> {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${Dictionary.translate} ${quranList.suratTerjemahan}'),
-            Text('${Dictionary.ayatCount}: ${quranList.countAyat}')
+            SizedBox(height: 5.0,),
+            Text(
+              '${Dictionary.translate}: ${quranList.suratTerjemahan}',
+              style: TextStyle(
+                fontSize: 13.0
+              ),
+            ),
+            SizedBox(height: 5.0,),
+            Text(
+              '${Dictionary.ayatCount}: ${quranList.countAyat}',
+              style: TextStyle(
+                fontSize: 13.0
+              ),
+            )
           ],
         ),
         // isThreeLine: true,

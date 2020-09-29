@@ -7,13 +7,11 @@ import 'package:alquranMobile/repositories/QuranListRepository.dart';
 part 'quranlist_state.dart';
 
 class QuranlistCubit extends Cubit<QuranlistState> {
-  QuranlistCubit({ this.repository }) : super(InitialState()) {
-    _getQuranList();
-  }
-
   final QuranListRepository repository;
 
-  void _getQuranList() async {
+  QuranlistCubit({ this.repository }) : super(InitialState());
+
+  Future<void> getQuranList() async {
     try {
       emit(LoadingState());
       final quranList = await repository.getQuranList();
