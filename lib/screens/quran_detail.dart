@@ -1,10 +1,12 @@
 import 'package:alquranMobile/blocs/qurandetail/cubit/qurandetail_cubit.dart';
 import 'package:alquranMobile/models/QuranDetailModel.dart';
+import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:alquranMobile/utils/Colors.dart';
 import 'package:alquranMobile/models/QuranListModel.dart';
+import 'package:html/parser.dart';
 
 class QuranDetail extends StatefulWidget {
 
@@ -64,7 +66,7 @@ class _QuranDetailState extends State<QuranDetail> {
           if (state is ErrorState) {
             Scaffold.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('error bro'),
+                  content: Text('Gagal mendapatkan detail surah'),
                 ),
             );
           }
@@ -103,12 +105,56 @@ class _QuranDetailState extends State<QuranDetail> {
   }
 
   Widget buildListTile(QuranDetailModel quranDetail) {
+    
+    String removeHTMLTag(String text) {
+      final document = parse(text);
+      final String parsedString = parse(document.body.text).documentElement.text;
+
+      return parsedString;
+    }
+
     return Card(
       elevation: 0,
       shadowColor: Colors.transparent,
       borderOnForeground: false,
       child: ListTile(
-        title: Text(quranDetail.ayaText),
+        contentPadding: EdgeInsets.all(16),
+        leading: Container(
+          height: 45,
+          width: 45,
+          decoration: BoxDecoration(
+            border: Border.all(color: ColorBase.separator, width: 2.0),
+            shape: BoxShape.circle,
+          ),
+          child: Center(child: Text(
+            quranDetail.ayaNumber.toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 18.0,
+              color: ColorBase.grey
+            ),
+          )),
+        ),
+        title: Text(
+          quranDetail.ayaText, 
+          textAlign: TextAlign.right,
+          style: TextStyle(
+            fontFamily: FontsFamily.lpmq,
+            fontSize: 27.0
+          ),
+        ),
+        subtitle: Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Text(
+            removeHTMLTag(quranDetail.translationAyaText),
+            style: TextStyle(
+              fontSize: 14.0,
+              fontWeight: FontWeight.w400,
+              color: ColorBase.grey,
+              height: 2,
+            ),
+          )
+        ),
       ),
     );
   }
