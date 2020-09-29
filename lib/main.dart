@@ -7,6 +7,7 @@ import 'package:alquranMobile/configs/Routes.dart';
 import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
+import 'package:alquranMobile/constants/Dictionary.dart';
 
 class MyBlocObserver extends BlocObserver {
   @override
@@ -43,7 +44,7 @@ class App extends StatelessWidget {
     
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Al-Quran Mobile',
+      title: Dictionary.appName,
       theme: ThemeData(
         primaryColorBrightness: Brightness.light,
         fontFamily: FontsFamily.roboto

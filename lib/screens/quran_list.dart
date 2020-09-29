@@ -7,6 +7,7 @@ import 'package:alquranMobile/components/Appbar.dart';
 import 'package:alquranMobile/constants/Dictionary.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
 import 'package:alquranMobile/models/QuranListModel.dart';
+import 'package:alquranMobile/models/PopupMenuModel.dart';
 import 'package:alquranMobile/repositories/QuranListRepository.dart';
 import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
 
@@ -16,9 +17,6 @@ class QuranListPage extends StatefulWidget {
 }
 
 class _QuranListPageState extends State<QuranListPage> {
-
-  final List<String> actionList = [Dictionary.settings, Dictionary.about];
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -64,7 +62,12 @@ class _QuranListPageState extends State<QuranListPage> {
           icon: Icon(Icons.more_vert, color: ColorBase.black),
           tooltip: 'More options',
           elevation: 20,
-          itemBuilder: (context) => actionList.map((menu) => PopupMenuItem(child: Text(menu))).toList(),
+          onSelected: _navigate,
+          itemBuilder: (context) => actionList.map((menu) => PopupMenuItem(
+            child: Text(menu.title),
+            value: menu.page,
+            ),
+          ).toList(),
         )
       ],
     );
@@ -112,5 +115,12 @@ class _QuranListPageState extends State<QuranListPage> {
         onTap: () => Navigator.pushNamed(context, Navigation.QuranDetail, arguments: quranList )
       ),
     );
+  }
+
+  void _navigate(String page) {
+    if (page != null) {
+      Navigator.pushNamed(context, page);
+    }
+    return null;
   }
 }
