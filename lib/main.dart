@@ -1,6 +1,3 @@
-import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
-import 'package:alquranMobile/repositories/QuranListRepository.dart';
-import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +7,11 @@ import 'package:alquranMobile/configs/Routes.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
 import 'package:alquranMobile/constants/Dictionary.dart';
+import 'package:alquranMobile/utils/FontsFamily.dart';
+import 'package:alquranMobile/repositories/QuranListRepository.dart';
+import 'package:alquranMobile/repositories/QuranDetailRepository.dart';
+import 'package:alquranMobile/blocs/quranlist/cubit/quranlist_cubit.dart';
+import 'package:alquranMobile/blocs/qurandetail/cubit/qurandetail_cubit.dart';
 
 class MyBlocObserver extends BlocObserver {
   @override
@@ -44,10 +46,19 @@ class App extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     
-    return BlocProvider(
-      create:(context) => QuranlistCubit(
-        repository: QuranListRepository()
-      ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<QuranlistCubit>(
+          create:(context) => QuranlistCubit(
+            repository: QuranListRepository()
+          ),
+        ),
+        BlocProvider<QurandetailCubit>(
+          create: (context) => QurandetailCubit(
+            repository: QuranDetailRepository()
+          ),
+        )
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: Dictionary.appName,
