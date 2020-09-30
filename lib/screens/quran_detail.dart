@@ -1,6 +1,7 @@
 
 import 'package:alquranMobile/models/BasmallahModel.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:alquranMobile/utils/Colors.dart';
@@ -101,11 +102,23 @@ class _QuranDetailState extends State<QuranDetail> {
                       child: buildBasmallah(),
                     ),
                     SliverList(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final quranDetail = state.quranDetail[index];
-                        return buildListTile(quranDetail);
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final int itemIndex = index ~/ 2;
+                          if (index.isEven) {
+                            final quranDetail = state.quranDetail[itemIndex];
+                            return buildListTile(quranDetail);
+                          } else {
+                            return Divider();
+                          }
                         },
-                        childCount: state.quranDetail.length,
+                        semanticIndexCallback: (Widget widget, int localIndex) {
+                          if (localIndex.isEven) {
+                            return localIndex ~/ 2;
+                          }
+                          return null;
+                        },
+                        childCount: math.max(0, state.quranDetail.length * 2 - 1),
                       )
                     )
                   ],
