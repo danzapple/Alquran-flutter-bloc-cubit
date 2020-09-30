@@ -1,15 +1,16 @@
-import 'package:alquranMobile/blocs/qurandetail/cubit/qurandetail_cubit.dart';
-import 'package:alquranMobile/models/QuranDetailModel.dart';
-import 'package:alquranMobile/utils/FontsFamily.dart';
+
+import 'package:alquranMobile/models/BasmallahModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:alquranMobile/utils/Colors.dart';
+import 'package:alquranMobile/utils/Helpers.dart';
+import 'package:alquranMobile/models/QuranDetailModel.dart';
+import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:alquranMobile/models/QuranListModel.dart';
-import 'package:html/parser.dart';
+import 'package:alquranMobile/blocs/qurandetail/cubit/qurandetail_cubit.dart';
 
 class QuranDetail extends StatefulWidget {
-
   final QuranListModel dataSurah;
 
   QuranDetail({ this.dataSurah });
@@ -20,13 +21,20 @@ class QuranDetail extends StatefulWidget {
 
 class _QuranDetailState extends State<QuranDetail> {
 
-  @override
+  Basmallah basmallah;
+
   void initState() {
     context.bloc<QurandetailCubit>().getQuranDetail(
       widget.dataSurah.id.toString(), 
       widget.dataSurah.countAyat.toString()
     );
+    renderBasmallah();
     super.initState();
+  }
+
+  void renderBasmallah() async {
+    Basmallah basmallah = await loadBasmallah();
+    this.basmallah = basmallah;
   }
 
   @override
@@ -74,7 +82,10 @@ class _QuranDetailState extends State<QuranDetail> {
         builder: (context, state) {
           if (state is LoadingState) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: Container(
+                color: ColorBase.white,
+                child: CircularProgressIndicator()
+              ),
             );
           } else if (state is LoadedState) {
             return Container(
@@ -84,15 +95,20 @@ class _QuranDetailState extends State<QuranDetail> {
                   widget.dataSurah.id.toString(), 
                   widget.dataSurah.countAyat.toString()
                 ),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1, 
-                  ),
-                  itemCount: state.quranDetail.length,
-                  itemBuilder: (context, index) {
-                    final quranDetail = state.quranDetail[index];
-                    return buildListTile(quranDetail);
-                  }
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverToBoxAdapter(
+                      child: buildBasmallah(),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final quranDetail = state.quranDetail[index];
+                        return buildListTile(quranDetail);
+                        },
+                        childCount: state.quranDetail.length,
+                      )
+                    )
+                  ],
                 ),
               ),
             );
@@ -104,15 +120,26 @@ class _QuranDetailState extends State<QuranDetail> {
     );
   }
 
+  Widget buildBasmallah() {
+    return widget.dataSurah.id == 1 || widget.dataSurah.id == 9 ? null : Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        children: [
+          Text(
+            basmallah.ayatArab,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: FontsFamily.lpmq,
+              fontSize: 30
+            ),
+          ),
+          Divider()
+        ],
+      ),
+    );
+  }
+
   Widget buildListTile(QuranDetailModel quranDetail) {
-    
-    String removeHTMLTag(String text) {
-      final document = parse(text);
-      final String parsedString = parse(document.body.text).documentElement.text;
-
-      return parsedString;
-    }
-
     return Card(
       elevation: 0,
       shadowColor: Colors.transparent,
@@ -121,17 +148,18 @@ class _QuranDetailState extends State<QuranDetail> {
         contentPadding: EdgeInsets.all(16),
         leading: Container(
           height: 45,
+          margin: EdgeInsets.only(right: 0.0),
           width: 45,
           decoration: BoxDecoration(
             border: Border.all(color: ColorBase.separator, width: 2.0),
             shape: BoxShape.circle,
           ),
           child: Center(child: Text(
-            quranDetail.ayaNumber.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 18.0,
-              color: ColorBase.grey
+          quranDetail.ayaNumber.toString(),
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: ColorBase.grey
             ),
           )),
         ),
@@ -140,13 +168,14 @@ class _QuranDetailState extends State<QuranDetail> {
           textAlign: TextAlign.right,
           style: TextStyle(
             fontFamily: FontsFamily.lpmq,
-            fontSize: 27.0
+            fontSize: 27.0,
+            height: 2.1
           ),
         ),
         subtitle: Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Text(
-            removeHTMLTag(quranDetail.translationAyaText),
+            Helper.removeHTMLTag(quranDetail.translationAyaText),
             style: TextStyle(
               fontSize: 14.0,
               fontWeight: FontWeight.w400,
