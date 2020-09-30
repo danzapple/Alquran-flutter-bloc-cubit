@@ -33,6 +33,7 @@ dependencies:
   dio: ^3.0.10
   equatable: ^1.2.5
   html: ^0.14.0+3
+  flutter_settings_screens: ^0.2.1
 
 dev_dependencies:
   flutter_test:

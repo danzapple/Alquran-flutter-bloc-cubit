@@ -41,6 +41,7 @@ class _QuranDetailState extends State<QuranDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorBase.white,
       appBar: AppBar(
       bottom: PreferredSize(
         child: Container(
@@ -83,10 +84,7 @@ class _QuranDetailState extends State<QuranDetail> {
         builder: (context, state) {
           if (state is LoadingState) {
             return Center(
-              child: Container(
-                color: ColorBase.white,
-                child: CircularProgressIndicator()
-              ),
+              child:  CircularProgressIndicator(),
             );
           } else if (state is LoadedState) {
             return Container(

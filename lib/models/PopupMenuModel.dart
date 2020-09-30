@@ -11,11 +11,11 @@ class PopupMenu {
 
 List<PopupMenu> actionList = [
   PopupMenu(
-    title: Dictionary.about,
-    page: Navigation.About
-  ),
-  PopupMenu(
     title: Dictionary.settings,
     page: Navigation.Settings
+  ),
+  PopupMenu(
+    title: Dictionary.about,
+    page: Navigation.About
   )
 ];

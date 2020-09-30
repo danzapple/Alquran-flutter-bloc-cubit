@@ -64,7 +64,7 @@ class App extends StatelessWidget {
         title: Dictionary.appName,
         theme: ThemeData(
           primaryColorBrightness: Brightness.light,
-          fontFamily: FontsFamily.roboto
+          fontFamily: FontsFamily.roboto,
         ),
         home: QuranListPage(),
         onGenerateRoute: generateRoutes,

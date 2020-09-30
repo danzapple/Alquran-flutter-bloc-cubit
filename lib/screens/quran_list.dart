@@ -25,6 +25,7 @@ class _QuranListPageState extends State<QuranListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorBase.white,
       appBar: buildAppBar(),
       body: BlocConsumer<QuranlistCubit, QuranlistState>(
         listener: (context, state) {
