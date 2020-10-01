@@ -1,14 +1,15 @@
-
-import 'package:alquranMobile/models/BasmallahModel.dart';
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+
+import 'package:alquranMobile/models/BottomSheetItemModel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:alquranMobile/utils/Colors.dart';
 import 'package:alquranMobile/utils/Helpers.dart';
-import 'package:alquranMobile/models/QuranDetailModel.dart';
 import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:alquranMobile/models/QuranListModel.dart';
+import 'package:alquranMobile/models/QuranDetailModel.dart';
+import 'package:alquranMobile/models/BasmallahModel.dart';
 import 'package:alquranMobile/blocs/qurandetail/cubit/qurandetail_cubit.dart';
 
 class QuranDetail extends StatefulWidget {
@@ -36,6 +37,36 @@ class _QuranDetailState extends State<QuranDetail> {
   void renderBasmallah() async {
     Basmallah basmallah = await loadBasmallah();
     this.basmallah = basmallah;
+  }
+
+  _showMenu(int ayatNumber) {
+    showModalBottomSheet(context: context, builder: (context) {
+      return Container(
+        height: 280,
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'QS. ${widget.dataSurah.suratName} : Ayat $ayatNumber', 
+                textAlign: TextAlign.center, 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0
+                )
+              ),
+            ),
+            ...bottomSheetLists.map((item) {
+              return ListTile(
+                leading: item.icon,
+                title: item.title,
+                onTap: item.onPress,
+              );
+            }).toList()
+          ],
+        )
+      );
+    });
   }
 
   @override
@@ -87,40 +118,37 @@ class _QuranDetailState extends State<QuranDetail> {
               child:  CircularProgressIndicator(),
             );
           } else if (state is LoadedState) {
-            return Container(
-              color: ColorBase.white,
-              child: RefreshIndicator(
-                onRefresh: () => context.bloc<QurandetailCubit>().getQuranDetail(
-                  widget.dataSurah.id.toString(), 
-                  widget.dataSurah.countAyat.toString()
-                ),
-                child: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverToBoxAdapter(
-                      child: buildBasmallah(),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final int itemIndex = index ~/ 2;
-                          if (index.isEven) {
-                            final quranDetail = state.quranDetail[itemIndex];
-                            return buildListTile(quranDetail);
-                          } else {
-                            return Divider();
-                          }
-                        },
-                        semanticIndexCallback: (Widget widget, int localIndex) {
-                          if (localIndex.isEven) {
-                            return localIndex ~/ 2;
-                          }
-                          return null;
-                        },
-                        childCount: math.max(0, state.quranDetail.length * 2 - 1),
-                      )
+            return RefreshIndicator(
+              onRefresh: () => context.bloc<QurandetailCubit>().getQuranDetail(
+                widget.dataSurah.id.toString(), 
+                widget.dataSurah.countAyat.toString()
+              ),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverToBoxAdapter(
+                    child: buildBasmallah(),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final int itemIndex = index ~/ 2;
+                        if (index.isEven) {
+                          final quranDetail = state.quranDetail[itemIndex];
+                          return buildListTile(quranDetail);
+                        } else {
+                          return Divider();
+                        }
+                      },
+                      semanticIndexCallback: (Widget widget, int localIndex) {
+                        if (localIndex.isEven) {
+                          return localIndex ~/ 2;
+                        }
+                        return null;
+                      },
+                      childCount: math.max(0, state.quranDetail.length * 2 - 1),
                     )
-                  ],
-                ),
+                  )
+                ],
               ),
             );
           } else {
@@ -151,51 +179,46 @@ class _QuranDetailState extends State<QuranDetail> {
   }
 
   Widget buildListTile(QuranDetailModel quranDetail) {
-    return Card(
-      elevation: 0,
-      shadowColor: Colors.transparent,
-      borderOnForeground: false,
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16),
-        leading: Container(
-          height: 45,
-          margin: EdgeInsets.only(right: 0.0),
-          width: 45,
-          decoration: BoxDecoration(
-            border: Border.all(color: ColorBase.separator, width: 2.0),
-            shape: BoxShape.circle,
-          ),
-          child: Center(child: Text(
-          quranDetail.ayaNumber.toString(),
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 18.0,
-            color: ColorBase.grey
-            ),
-          )),
+    return ListTile(
+      contentPadding: EdgeInsets.all(16),
+      leading: Container(
+        height: 45,
+        width: 45,
+        decoration: BoxDecoration(
+          border: Border.all(color: ColorBase.separator, width: 2.0),
+          shape: BoxShape.circle,
         ),
-        title: Text(
-          quranDetail.ayaText, 
-          textAlign: TextAlign.right,
-          style: TextStyle(
-            fontFamily: FontsFamily.lpmq,
-            fontSize: 27.0,
-            height: 2.1
+        child: Center(child: Text(
+        quranDetail.ayaNumber.toString(),
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 18.0,
+          color: ColorBase.grey
           ),
-        ),
-        subtitle: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            Helper.removeHTMLTag(quranDetail.translationAyaText),
-            style: TextStyle(
-              fontSize: 14.0,
-              fontWeight: FontWeight.w400,
-              color: ColorBase.grey,
-              height: 2,
-            ),
-          )
+        )),
+      ),
+      title: Text(
+        quranDetail.ayaText, 
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          fontFamily: FontsFamily.lpmq,
+          fontSize: 27.0,
+          height: 2.1
         ),
       ),
+      subtitle: Padding(
+        padding: EdgeInsets.symmetric(vertical: 10),
+        child: Text(
+          Helper.removeHTMLTag(quranDetail.translationAyaText),
+          style: TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.w400,
+            color: ColorBase.grey,
+            height: 2,
+          ),
+        )
+      ),
+      onTap: () => _showMenu(quranDetail.ayaNumber),
     );
   }
 }

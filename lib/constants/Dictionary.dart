@@ -14,4 +14,8 @@ class Dictionary {
   static String help = 'Bantuan';
   static String needHelpTitle = 'Butuh Pertanyaan? Butuh Bantuan?';
   static String appVersion = 'Versi Aplikasi';
+  static String playSurah = 'Mainkan Surah';
+  static String showTafsir = 'Lihat Tafsir';
+  static String copyAyat = 'Salin Ayat';
+  static String shareAyat = 'Bagikan Surah';
 }
