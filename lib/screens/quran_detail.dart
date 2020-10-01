@@ -216,14 +216,16 @@ class _QuranDetailState extends State<QuranDetail> {
           border: Border.all(color: ColorBase.separator, width: 2.0),
           shape: BoxShape.circle,
         ),
-        child: Center(child: Text(
-        quranDetail.ayaNumber.toString(),
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 18.0,
-          color: ColorBase.grey
+        child: Center(
+          child: Text(
+            quranDetail.ayaNumber.toString(),
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 18.0,
+              color: ColorBase.grey
+            ),
           ),
-        )),
+        ),
       ),
       title: Text(
         quranDetail.ayaText, 
