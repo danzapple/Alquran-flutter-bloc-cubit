@@ -1,7 +1,8 @@
 import 'dart:math' as math;
-
-import 'package:alquranMobile/models/BottomSheetItemModel.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:alquranMobile/utils/Colors.dart';
@@ -10,6 +11,7 @@ import 'package:alquranMobile/utils/FontsFamily.dart';
 import 'package:alquranMobile/models/QuranListModel.dart';
 import 'package:alquranMobile/models/QuranDetailModel.dart';
 import 'package:alquranMobile/models/BasmallahModel.dart';
+import 'package:alquranMobile/models/BottomSheetItemModel.dart';
 import 'package:alquranMobile/blocs/qurandetail/cubit/qurandetail_cubit.dart';
 
 class QuranDetail extends StatefulWidget {
@@ -24,6 +26,7 @@ class QuranDetail extends StatefulWidget {
 class _QuranDetailState extends State<QuranDetail> {
 
   Basmallah basmallah;
+  QuranDetailModel detailAyat;
 
   void initState() {
     context.bloc<QurandetailCubit>().getQuranDetail(
@@ -39,7 +42,31 @@ class _QuranDetailState extends State<QuranDetail> {
     this.basmallah = basmallah;
   }
 
-  _showMenu(int ayatNumber) {
+  _onTapCopy() {
+    FlutterClipboard.copy('${detailAyat.ayaText}\n\n${detailAyat.translationAyaText}').then((value) {
+        Fluttertoast.showToast(msg: 'Pesan berhasil disalin');
+        Navigator.pop(context);
+      } 
+    );
+  }
+
+  _onTapShare() {
+    Share.share('${detailAyat.ayaText}\n\n${detailAyat.translationAyaText}');
+    Navigator.pop(context);
+  }
+
+  onPressList(String key) {
+    switch (key) {
+      case 'copy':
+        return _onTapCopy();
+      case 'share':
+        return _onTapShare();
+      default:
+    }
+  }
+
+  _showMenu(QuranDetailModel quranDetail) {
+    setState(() => detailAyat = quranDetail);
     showModalBottomSheet(context: context, builder: (context) {
       return Container(
         height: 280,
@@ -48,7 +75,7 @@ class _QuranDetailState extends State<QuranDetail> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                'QS. ${widget.dataSurah.suratName} : Ayat $ayatNumber', 
+                'QS. ${widget.dataSurah.suratName} : Ayat ${quranDetail.ayaNumber}', 
                 textAlign: TextAlign.center, 
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -60,7 +87,7 @@ class _QuranDetailState extends State<QuranDetail> {
               return ListTile(
                 leading: item.icon,
                 title: item.title,
-                onTap: item.onPress,
+                onTap: () => onPressList(item.key),
               );
             }).toList()
           ],
@@ -218,7 +245,7 @@ class _QuranDetailState extends State<QuranDetail> {
           ),
         )
       ),
-      onTap: () => _showMenu(quranDetail.ayaNumber),
+      onTap: () => _showMenu(quranDetail),
     );
   }
 }

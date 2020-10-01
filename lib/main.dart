@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:alquranMobile/utils/Colors.dart';
 import 'package:alquranMobile/configs/Routes.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
