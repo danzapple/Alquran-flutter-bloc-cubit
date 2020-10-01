@@ -43,7 +43,8 @@ class _QuranDetailState extends State<QuranDetail> {
   }
 
   _onTapCopy() {
-    FlutterClipboard.copy('${detailAyat.ayaText}\n\n${detailAyat.translationAyaText}').then((value) {
+    FlutterClipboard.copy('${detailAyat.ayaText}\n\n${detailAyat.translationAyaText}')
+    .then((value) {
         Fluttertoast.showToast(msg: 'Pesan berhasil disalin');
         Navigator.pop(context);
       } 
