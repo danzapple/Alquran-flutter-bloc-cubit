@@ -45,7 +45,7 @@ class _QuranDetailState extends State<QuranDetail> {
   _onTapCopy() {
     FlutterClipboard.copy('${detailAyat.ayaText}\n\n${detailAyat.translationAyaText}')
     .then((value) {
-        Fluttertoast.showToast(msg: 'Pesan berhasil disalin');
+        Fluttertoast.showToast(msg: 'Ayat berhasil disalin');
         Navigator.pop(context);
       } 
     );
@@ -63,6 +63,7 @@ class _QuranDetailState extends State<QuranDetail> {
       case 'share':
         return _onTapShare();
       default:
+        return null;
     }
   }
 
