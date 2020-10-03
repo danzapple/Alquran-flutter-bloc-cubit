@@ -32,8 +32,9 @@ Route generateRoutes(RouteSettings settings) {
 PageTransition buildRoute(RouteSettings settings, Widget builder) {
   return PageTransition(
     child: builder,
-    curve: Curves.easeInOut,
     settings: settings,
+    curve: Curves.easeInOut,
+    duration: Duration(milliseconds: 200),
     type: PageTransitionType.rightToLeftWithFade,
   );
 }

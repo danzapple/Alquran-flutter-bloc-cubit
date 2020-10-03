@@ -189,24 +189,22 @@ class _QuranDetailState extends State<QuranDetail> {
   }
 
   Widget buildBasmallah() {
-    return widget.dataSurah.id != 1 || widget.dataSurah.id != 9 ? 
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Column(
-          children: [
-            Text(
-              basmallah.ayatArab,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: FontsFamily.lpmq,
-                fontSize: 30
-              ),
+    return widget.dataSurah.id == 1 || widget.dataSurah.id == 9 ? null : Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        children: [
+          Text(
+            basmallah.ayatArab,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: FontsFamily.lpmq,
+              fontSize: 30
             ),
-            Divider(),
-          ],
-        ),
-      ) 
-    : null;
+          ),
+          Divider(),
+        ],
+      ),
+    );
   }
 
   Widget buildListTile(QuranDetailModel quranDetail) {
