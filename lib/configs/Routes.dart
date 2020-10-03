@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'package:alquranMobile/screens/about.dart';
 import 'package:alquranMobile/screens/splash.dart';
 import 'package:alquranMobile/screens/settings.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
-import 'package:alquranMobile/screens/quran_detail.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:alquranMobile/screens/quran_detail.dart';
 
 Route generateRoutes(RouteSettings settings) {
 
