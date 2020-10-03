@@ -66,7 +66,7 @@ class App extends StatelessWidget {
           fontFamily: FontsFamily.roboto,
           pageTransitionsTheme: PageTransitionsTheme(
             builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+              TargetPlatform.android: ZoomPageTransitionsBuilder(),
             },
           )
         ),
