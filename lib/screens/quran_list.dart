@@ -43,20 +43,17 @@ class _QuranListPageState extends State<QuranListPage> {
               child: CircularProgressIndicator(),
             );
           } else if (state is LoadedState) {
-            return Container(
-              color: ColorBase.white,
-              child: RefreshIndicator(
-                onRefresh: () => context.bloc<QuranlistCubit>().getQuranList(),
-                child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                    height: 1, 
-                  ),
-                  itemCount: state.quranList.length,
-                  itemBuilder: (context, index) {
-                    final quranList = state.quranList[index];
-                    return buildListTile(quranList);
-                  }
+            return RefreshIndicator(
+              onRefresh: () => context.bloc<QuranlistCubit>().getQuranList(),
+              child: ListView.separated(
+                separatorBuilder: (context, index) => Divider(
+                  height: 1, 
                 ),
+                itemCount: state.quranList.length,
+                itemBuilder: (context, index) {
+                  final quranList = state.quranList[index];
+                  return buildListTile(quranList);
+                }
               ),
             );
           } else {
@@ -88,68 +85,63 @@ class _QuranListPageState extends State<QuranListPage> {
   }
 
   Widget buildListTile(QuranListModel quranList) {
-    return Card(
-      elevation: 0,
-      shadowColor: Colors.transparent,
-      borderOnForeground: false,
-      child: ListTile(
-        contentPadding: EdgeInsets.all(16),
-        leading: Container(
-          height: 45,
-          width: 45,
-          decoration: BoxDecoration(
-            border: Border.all(color: ColorBase.separator, width: 2.0),
-            shape: BoxShape.circle,
+    return ListTile(
+      contentPadding: EdgeInsets.all(16),
+      leading: Container(
+        height: 45,
+        width: 45,
+        decoration: BoxDecoration(
+          border: Border.all(color: ColorBase.separator, width: 2.0),
+          shape: BoxShape.circle,
+        ),
+        child: Center(child: Text(
+          quranList.id.toString(),
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 18.0,
+            color: ColorBase.grey
           ),
-          child: Center(child: Text(
-            quranList.id.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 18.0,
-              color: ColorBase.grey
-            ),
-          )),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              quranList.suratName,
-              style: TextStyle(
-                fontWeight: FontWeight.w500
-              )
-            ),
-            Text(
-              ' ( ${quranList.suratText} ) ', 
-              style: TextStyle(
-                fontFamily: FontsFamily.lpmq
-                )
-              ) 
-          ]
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 5.0,),
-            Text(
-              '${Dictionary.translate}: ${quranList.suratTerjemahan}',
-              style: TextStyle(
-                fontSize: 13.0
-              ),
-            ),
-            SizedBox(height: 5.0,),
-            Text(
-              '${Dictionary.ayatCount}: ${quranList.countAyat}',
-              style: TextStyle(
-                fontSize: 13.0
-              ),
-            )
-          ],
-        ),
-        // isThreeLine: true,
-        trailing: Icon(Icons.chevron_right),
-        onTap: () => Navigator.pushNamed(context, Navigation.QuranDetail, arguments: quranList )
+        )),
       ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            quranList.suratName,
+            style: TextStyle(
+              fontWeight: FontWeight.w500
+            )
+          ),
+          Text(
+            ' ( ${quranList.suratText} ) ', 
+            style: TextStyle(
+              fontFamily: FontsFamily.lpmq
+              )
+            ) 
+        ]
+      ),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 5.0,),
+          Text(
+            '${Dictionary.translate}: ${quranList.suratTerjemahan}',
+            style: TextStyle(
+              fontSize: 13.0
+            ),
+          ),
+          SizedBox(height: 5.0,),
+          Text(
+            '${Dictionary.ayatCount}: ${quranList.countAyat}',
+            style: TextStyle(
+              fontSize: 13.0
+            ),
+          )
+        ],
+      ),
+      // isThreeLine: true,
+      trailing: Icon(Icons.chevron_right),
+      onTap: () => Navigator.pushNamed(context, Navigation.QuranDetail, arguments: quranList )
     );
   }
 

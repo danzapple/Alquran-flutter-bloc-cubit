@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alquranMobile/screens/about.dart';
@@ -6,6 +7,7 @@ import 'package:alquranMobile/screens/settings.dart';
 import 'package:alquranMobile/screens/quran_list.dart';
 import 'package:alquranMobile/screens/quran_detail.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
+import 'package:page_transition/page_transition.dart';
 
 Route generateRoutes(RouteSettings settings) {
 
@@ -28,9 +30,11 @@ Route generateRoutes(RouteSettings settings) {
   
 }
 
-MaterialPageRoute buildRoute(RouteSettings settings, Widget builder) {
-  return MaterialPageRoute(
+PageTransition buildRoute(RouteSettings settings, Widget builder) {
+  return PageTransition(
+    child: builder,
+    curve: Curves.easeInOut,
     settings: settings,
-    builder: (BuildContext context) => builder,
+    type: PageTransitionType.rightToLeftWithFade,
   );
 }
