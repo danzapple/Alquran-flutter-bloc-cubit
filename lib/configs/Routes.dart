@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:page_transition/page_transition.dart';
 
 import 'package:alquranMobile/screens/about.dart';
 import 'package:alquranMobile/screens/splash.dart';
@@ -29,12 +28,9 @@ Route generateRoutes(RouteSettings settings) {
   
 }
 
-PageTransition buildRoute(RouteSettings settings, Widget builder) {
-  return PageTransition(
-    child: builder,
+MaterialPageRoute buildRoute(RouteSettings settings, Widget builder) {
+  return MaterialPageRoute(
     settings: settings,
-    curve: Curves.easeInOut,
-    duration: Duration(milliseconds: 200),
-    type: PageTransitionType.rightToLeftWithFade,
+    builder: (BuildContext context) => builder,
   );
 }

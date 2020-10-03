@@ -64,6 +64,11 @@ class App extends StatelessWidget {
         theme: ThemeData(
           primaryColorBrightness: Brightness.light,
           fontFamily: FontsFamily.roboto,
+          pageTransitionsTheme: PageTransitionsTheme(
+            builders: <TargetPlatform, PageTransitionsBuilder>{
+              TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+            },
+          )
         ),
         home: QuranListPage(),
         onGenerateRoute: generateRoutes,
