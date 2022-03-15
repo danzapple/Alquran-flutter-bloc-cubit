@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class Basmallah {
-  String ayatArab;
-  String ayatTerjemahan;
+  String? ayatArab;
+  String? ayatTerjemahan;
 
   Basmallah({this.ayatArab, this.ayatTerjemahan});
 

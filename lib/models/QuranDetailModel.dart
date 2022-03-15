@@ -1,11 +1,11 @@
 class QuranDetailModel {
-  int ayaId;
-  int ayaNumber;
-  String ayaText;
-  int suraId;
-  int juzId;
-  int pageNumber;
-  String translationAyaText;
+  int? ayaId;
+  int? ayaNumber;
+  String? ayaText;
+  int? suraId;
+  int? juzId;
+  int? pageNumber;
+  String? translationAyaText;
 
   QuranDetailModel({
     this.ayaId,

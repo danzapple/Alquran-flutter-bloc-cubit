@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:alquranMobile/utils/Colors.dart';
 import 'package:alquranMobile/components/Appbar.dart';

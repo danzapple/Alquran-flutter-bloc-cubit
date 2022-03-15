@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:alquranMobile/constants/Dictionary.dart';
 
 class BottomSheetItem {
-  final String key;
-  final Text title;
-  final Icon icon;
+  final String? key;
+  final Text? title;
+  final Icon? icon;
 
   BottomSheetItem({
     this.key,

@@ -1,3 +1,5 @@
+// @dart=2.9
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +21,7 @@ class MyBlocObserver extends BlocObserver {
     print(transition);
   }
 
-  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
+  void onErrors(Cubit cubit, Object error, StackTrace stackTrace) {
     print('$error, $stackTrace');
     super.onError(cubit, error, stackTrace);
   }
@@ -33,43 +35,36 @@ void main() {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent
-      )
-    );
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<QuranlistCubit>(
-          create:(context) => QuranlistCubit(
-            repository: QuranListRepository()
-          ),
+          create: (context) =>
+              QuranlistCubit(repository: QuranListRepository()),
         ),
         BlocProvider<QurandetailCubit>(
-          create: (context) => QurandetailCubit(
-            repository: QuranDetailRepository()
-          ),
+          create: (context) =>
+              QurandetailCubit(repository: QuranDetailRepository()),
         )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: Dictionary.appName,
         theme: ThemeData(
-          primaryColorBrightness: Brightness.light,
-          fontFamily: FontsFamily.roboto,
-          pageTransitionsTheme: PageTransitionsTheme(
-            builders: <TargetPlatform, PageTransitionsBuilder>{
-              TargetPlatform.android: ZoomPageTransitionsBuilder(),
-            },
-          )
-        ),
+            primaryColorBrightness: Brightness.light,
+            fontFamily: FontsFamily.roboto,
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                TargetPlatform.android: ZoomPageTransitionsBuilder(),
+              },
+            )),
         home: QuranListPage(),
         onGenerateRoute: generateRoutes,
         navigatorKey: Navigation.navKey,

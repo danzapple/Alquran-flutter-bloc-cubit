@@ -4,10 +4,10 @@ import 'package:alquranMobile/utils/Colors.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
 
   final String title;
-  final List<Widget> actions;
+  final List<Widget>? actions;
 
   CustomAppBar({
-    @required this.title,
+    required this.title,
     this.actions,
   });
 

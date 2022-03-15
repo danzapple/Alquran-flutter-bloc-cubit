@@ -1,9 +1,9 @@
 class QuranListModel {
-  int id;
-  String suratName;
-  String suratText;
-  String suratTerjemahan;
-  int countAyat;
+  int? id;
+  String? suratName;
+  String? suratText;
+  String? suratTerjemahan;
+  int? countAyat;
 
   QuranListModel({
     this.id,

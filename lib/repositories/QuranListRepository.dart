@@ -4,7 +4,7 @@ import 'package:alquranMobile/models/QuranListModel.dart';
 class QuranListRepository {
   var dio = Dio();
 
-  Future<List<QuranListModel>> getQuranList() async {
+  Future<List<QuranListModel>?> getQuranList() async {
     String url = 'https://quran.kemenag.go.id/index.php/api/v1/surat';
 
     try {

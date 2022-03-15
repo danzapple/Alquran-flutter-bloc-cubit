@@ -16,24 +16,24 @@ class QuranListPage extends StatefulWidget {
 }
 
 class _QuranListPageState extends State<QuranListPage> {
-
   @override
   void initState() {
-    context.bloc<QuranlistCubit>().getQuranList();
+    BlocProvider.of<QuranlistCubit>(context).getQuranList();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorBase.white,
-      appBar: buildAppBar(),
+      appBar: buildAppBar() as PreferredSizeWidget?,
       body: BlocConsumer<QuranlistCubit, QuranlistState>(
         listener: (context, state) {
           if (state is ErrorState) {
             Scaffold.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('error bro'),
-                ),
+              SnackBar(
+                content: Text('error bro'),
+              ),
             );
           }
         },
@@ -44,17 +44,17 @@ class _QuranListPageState extends State<QuranListPage> {
             );
           } else if (state is LoadedState) {
             return RefreshIndicator(
-              onRefresh: () => context.bloc<QuranlistCubit>().getQuranList(),
+              onRefresh: () =>
+                  BlocProvider.of<QuranlistCubit>(context).getQuranList(),
               child: ListView.separated(
-                separatorBuilder: (context, index) => Divider(
-                  height: 1, 
-                ),
-                itemCount: state.quranList.length,
-                itemBuilder: (context, index) {
-                  final quranList = state.quranList[index];
-                  return buildListTile(quranList);
-                }
-              ),
+                  separatorBuilder: (context, index) => Divider(
+                        height: 1,
+                      ),
+                  itemCount: state.quranList!.length,
+                  itemBuilder: (context, index) {
+                    final quranList = state.quranList![index];
+                    return buildListTile(quranList);
+                  }),
             );
           } else {
             return Container();
@@ -69,16 +69,19 @@ class _QuranListPageState extends State<QuranListPage> {
       title: Dictionary.appName,
       actions: [
         PopupMenuButton(
-          offset: Offset(0,10),
+          offset: Offset(0, 10),
           icon: Icon(Icons.more_vert, color: ColorBase.black),
           tooltip: 'More options',
           elevation: 5,
           onSelected: _navigate,
-          itemBuilder: (context) => actionList.map((menu) => PopupMenuItem(
-            child: Text(menu.title),
-            value: menu.page,
-            ),
-          ).toList(),
+          itemBuilder: (context) => actionList
+              .map(
+                (menu) => PopupMenuItem(
+                  child: Text(menu.title!),
+                  value: menu.page,
+                ),
+              )
+              .toList(),
         )
       ],
     );
@@ -86,63 +89,52 @@ class _QuranListPageState extends State<QuranListPage> {
 
   Widget buildListTile(QuranListModel quranList) {
     return ListTile(
-      contentPadding: EdgeInsets.all(16),
-      leading: Container(
-        height: 45,
-        width: 45,
-        decoration: BoxDecoration(
-          border: Border.all(color: ColorBase.separator, width: 2.0),
-          shape: BoxShape.circle,
+        contentPadding: EdgeInsets.all(16),
+        leading: Container(
+          height: 45,
+          width: 45,
+          decoration: BoxDecoration(
+            border: Border.all(color: ColorBase.separator, width: 2.0),
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+              child: Text(
+            quranList.id.toString(),
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 18.0,
+                color: ColorBase.grey),
+          )),
         ),
-        child: Center(child: Text(
-          quranList.id.toString(),
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 18.0,
-            color: ColorBase.grey
-          ),
-        )),
-      ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            quranList.suratName,
-            style: TextStyle(
-              fontWeight: FontWeight.w500
+        title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Text(quranList.suratName!,
+              style: TextStyle(fontWeight: FontWeight.w500)),
+          Text(' ( ${quranList.suratText} ) ',
+              style: TextStyle(fontFamily: FontsFamily.lpmq))
+        ]),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 5.0,
+            ),
+            Text(
+              '${Dictionary.translate}: ${quranList.suratTerjemahan}',
+              style: TextStyle(fontSize: 13.0),
+            ),
+            SizedBox(
+              height: 5.0,
+            ),
+            Text(
+              '${Dictionary.ayatCount}: ${quranList.countAyat}',
+              style: TextStyle(fontSize: 13.0),
             )
-          ),
-          Text(
-            ' ( ${quranList.suratText} ) ', 
-            style: TextStyle(
-              fontFamily: FontsFamily.lpmq
-              )
-            ) 
-        ]
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 5.0,),
-          Text(
-            '${Dictionary.translate}: ${quranList.suratTerjemahan}',
-            style: TextStyle(
-              fontSize: 13.0
-            ),
-          ),
-          SizedBox(height: 5.0,),
-          Text(
-            '${Dictionary.ayatCount}: ${quranList.countAyat}',
-            style: TextStyle(
-              fontSize: 13.0
-            ),
-          )
-        ],
-      ),
-      // isThreeLine: true,
-      trailing: Icon(Icons.chevron_right),
-      onTap: () => Navigator.pushNamed(context, Navigation.QuranDetail, arguments: quranList )
-    );
+          ],
+        ),
+        // isThreeLine: true,
+        trailing: Icon(Icons.chevron_right),
+        onTap: () => Navigator.pushNamed(context, Navigation.QuranDetail,
+            arguments: quranList));
   }
 
   void _navigate(String page) {

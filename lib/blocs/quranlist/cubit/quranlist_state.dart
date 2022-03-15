@@ -16,10 +16,10 @@ class LoadingState extends QuranlistState {
 class LoadedState extends QuranlistState {
   LoadedState(this.quranList);
 
-  final List<QuranListModel> quranList;
+  final List<QuranListModel>? quranList;
 
   @override
-  List<Object> get props => [quranList];
+  List<Object?> get props => [quranList];
 }
 
 class ErrorState extends QuranlistState {

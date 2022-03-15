@@ -5,7 +5,7 @@ import 'package:alquranMobile/models/QuranDetailModel.dart';
 class QuranDetailRepository {
   var dio = Dio();
 
-  Future<List<QuranDetailModel>> getQuranDetail(String surahId, String ayatCount) async {
+  Future<List<QuranDetailModel>?> getQuranDetail(String surahId, String ayatCount) async {
     String url = 'https://quran.kemenag.go.id/index.php/api/v1/ayatweb/$surahId/0/0/$ayatCount';
 
     try {

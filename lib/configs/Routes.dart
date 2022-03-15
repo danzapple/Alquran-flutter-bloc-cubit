@@ -1,3 +1,4 @@
+import 'package:alquranMobile/models/QuranListModel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:alquranMobile/screens/about.dart';
@@ -7,7 +8,7 @@ import 'package:alquranMobile/screens/quran_list.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
 import 'package:alquranMobile/screens/quran_detail.dart';
 
-Route generateRoutes(RouteSettings settings) {
+Route? generateRoutes(RouteSettings settings) {
 
   final args = settings.arguments;
 
@@ -21,7 +22,7 @@ Route generateRoutes(RouteSettings settings) {
     case Navigation.QuranList:
       return buildRoute(settings, QuranListPage());
     case Navigation.QuranDetail:
-      return buildRoute(settings, QuranDetail(dataSurah: args));
+      return buildRoute(settings, QuranDetail(dataSurah: args as QuranListModel?));
     default:
       return null;
   }

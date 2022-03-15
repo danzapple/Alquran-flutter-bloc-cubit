@@ -2,8 +2,8 @@ import 'package:alquranMobile/constants/Dictionary.dart';
 import 'package:alquranMobile/constants/Navigation.dart';
 
 class PopupMenu {
-  final String title;
-  final String page;
+  final String? title;
+  final String? page;
 
   PopupMenu({ this.title, this.page });
 

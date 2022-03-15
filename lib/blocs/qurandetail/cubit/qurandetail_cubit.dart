@@ -8,14 +8,14 @@ import 'package:alquranMobile/models/QuranDetailModel.dart';
 part 'qurandetail_state.dart';
 
 class QurandetailCubit extends Cubit<QurandetailState> {
-  final QuranDetailRepository repository;
+  final QuranDetailRepository? repository;
   
   QurandetailCubit({ this.repository }) : super(InitialState());
 
   Future<void> getQuranDetail(String surahId, String ayatCount) async {
     try {
       emit(LoadingState());
-      final quranDetail = await repository.getQuranDetail(surahId, ayatCount);
+      final quranDetail = await repository!.getQuranDetail(surahId, ayatCount);
       emit(LoadedState(quranDetail));
     } catch (e) {
       emit(ErrorState());
